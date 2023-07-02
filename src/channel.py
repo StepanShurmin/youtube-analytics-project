@@ -15,12 +15,40 @@ class Channel:
     """Класс для ютуб-канала"""
 
     def __init__(self, channel_id: str) -> None:
-        """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
+        """Экземпляр инициализируется. Дальше получает необходимые атрибуты."""
         self.channel_id = channel_id
+        self.channel = Channel.get_service().channels().list(
+            id=channel_id, part='snippet,statistics'
+        ).execute()
+
+        self.id = self.channel['items'][0]['id']
+        self.title = self.channel['items'][0]['snippet']['title']
+        self.description = self.channel['items'][0]['snippet']['description']
+        self.url = f"https://www.youtube.com/{self.channel['items'][0]['snippet']['customUrl']}"
+        self.subscriber_count = self.channel['items'][0]['statistics']['subscriberCount']
+        self.video_count = self.channel['items'][0]['statistics']['videoCount']
+        self.view_count = self.channel['items'][0]['statistics']['viewCount']
+
+    @classmethod
+    def get_service(cls):
+        """Возвращает объект для работы с YouTube API."""
+        return build('youtube', 'v3', developerKey=api_key)
+
+    def to_json(self, path):
+        """Сохраняет в файл значения атрибутов экземпляра `Channel`."""
+        data = {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'url': self.url,
+            'subscriber_count': self.subscriber_count,
+            'video_count': self.video_count,
+            'view_count': self.view_count
+        }
+
+        with open(path, 'w') as file:
+            json.dump(data, file, indent=2, ensure_ascii=False)
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
-        youtube = build('youtube', 'v3', developerKey=api_key)
-        channel_id_youtube = self.channel_id
-        channel = youtube.channels().list(id=channel_id_youtube, part='snippet,statistics').execute()
-        printj(channel)
+        print(json.dump(self.channel, indent=2, ensure_ascii=False))
