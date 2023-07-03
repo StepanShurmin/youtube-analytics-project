@@ -42,7 +42,7 @@ class Channel:
     @channel_id.setter
     def channel_id(self, value):
         """Устанавливает значение поля channel_id и генерирует исключение AttributeError."""
-        return AttributeError
+        return AttributeError  #print(AttributeError)
 
     def to_json(self, path):
         """Сохраняет в файл значения атрибутов экземпляра `Channel`."""
