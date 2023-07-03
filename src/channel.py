@@ -16,7 +16,7 @@ class Channel:
 
     def __init__(self, channel_id: str) -> None:
         """Экземпляр инициализируется. Дальше получает необходимые атрибуты."""
-        self.channel_id = channel_id
+        self._channel_id = channel_id
         self.channel = Channel.get_service().channels().list(
             id=channel_id, part='snippet,statistics'
         ).execute()
@@ -33,6 +33,16 @@ class Channel:
     def get_service(cls):
         """Возвращает объект для работы с YouTube API."""
         return build('youtube', 'v3', developerKey=api_key)
+
+    @property
+    def channel_id(self):
+        """Возвращает значение поля channel_id."""
+        return self._channel_id
+
+    @channel_id.setter
+    def channel_id(self, value):
+        """Устанавливает значение поля channel_id и генерирует исключение AttributeError."""
+        return AttributeError
 
     def to_json(self, path):
         """Сохраняет в файл значения атрибутов экземпляра `Channel`."""
