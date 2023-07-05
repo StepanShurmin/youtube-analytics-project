@@ -29,6 +29,39 @@ class Channel:
         self.video_count = self.channel['items'][0]['statistics']['videoCount']
         self.view_count = self.channel['items'][0]['statistics']['viewCount']
 
+    def __str__(self) -> str:
+        """Возвращает строковое представление экземпляра класса."""
+        return f"'{self.title} ({self.url}/{self.id})'"
+
+    def __add__(self, other: 'Channel') -> 'Channel':
+        """Возвращает сумму двух экземпляров класса."""
+        return self.subscriber_count + other.subscriber_count
+
+    def __sub__(self, other: 'Channel') -> int:
+        """Возвращает разность двух экземпляров класс."""
+        return int(self.subscriber_count) - int(other.subscriber_count)
+
+    def __gt__(self, other: 'Channel') -> bool:
+        """Возвращает bool, при сравнении экземпляров класса."""
+        return self.subscriber_count > other.subscriber_count
+
+    def __ge__(self, other: 'Channel') -> bool:
+        """Возвращает bool, при сравнении экземпляров класса."""
+        return self.subscriber_count >= other.subscriber_count
+
+    def __lt__(self, other: 'Channel') -> bool:
+        """Возвращает bool, при сравнении экземпляров класса."""
+        return self.subscriber_count < other.subscriber_count
+
+    def __le__(self, other: 'Channel') -> bool:
+        """Возвращает bool, при сравнении экземпляров класса."""
+        return self.subscriber_count <= other.subscriber_count
+
+    def __eq__(self, other: 'Channel') -> bool:
+        """Возвращает bool, при сравнении экземпляров класса."""
+        return self.subscriber_count == other.subscriber_count
+
+    # def __
     @classmethod
     def get_service(cls):
         """Возвращает объект для работы с YouTube API."""
@@ -42,7 +75,7 @@ class Channel:
     @channel_id.setter
     def channel_id(self, value):
         """Устанавливает значение поля channel_id и генерирует исключение AttributeError."""
-        return AttributeError  #print(AttributeError)
+        print(AttributeError)  # return AttributeError
 
     def to_json(self, path):
         """Сохраняет в файл значения атрибутов экземпляра `Channel`."""
