@@ -35,7 +35,10 @@ class Channel:
 
     def __add__(self, other: 'Channel') -> 'Channel':
         """Возвращает сумму двух экземпляров класса."""
-        return self.subscriber_count + other.subscriber_count
+        if type(other) == Channel:
+            return self.subscriber_count + other.subscriber_count
+        else:
+            raise TypeError
 
     def __sub__(self, other: 'Channel') -> int:
         """Возвращает разность двух экземпляров класс."""
