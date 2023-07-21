@@ -1,12 +1,10 @@
-import os
-from googleapiclient.discovery import build
 from datetime import timedelta
 import isodate
 
-api_key: str = os.getenv('YT_API_KEY')
+from src.apimix import ApiMixin
 
 
-class PlayList:
+class PlayList(ApiMixin):
     """Класс плейлист."""
 
     def __init__(self, playlist_id):
@@ -26,11 +24,6 @@ class PlayList:
         self.__video_response = self.get_service().videos().list(part='contentDetails,statistics',
                                                                  id=','.join(self.__video_id)
                                                                  ).execute()
-
-    @classmethod
-    def get_service(cls):
-        """Возвращает объект для работы с YouTube API."""
-        return build('youtube', 'v3', developerKey=api_key)
 
     @property
     def total_duration(self) -> timedelta:

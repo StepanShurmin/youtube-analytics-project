@@ -1,9 +1,7 @@
 import os
 import json
 
-from googleapiclient.discovery import build
-
-api_key: str = os.getenv('YT_API_KEY')
+from src.apimix import ApiMixin
 
 
 def printj(dict_to_print: dict) -> None:
@@ -11,7 +9,7 @@ def printj(dict_to_print: dict) -> None:
     print(json.dumps(dict_to_print, indent=2, ensure_ascii=False))
 
 
-class Channel:
+class Channel(ApiMixin):
     """Класс для ютуб-канала"""
 
     def __init__(self, channel_id: str) -> None:
@@ -63,12 +61,6 @@ class Channel:
     def __eq__(self, other: 'Channel') -> bool:
         """Возвращает bool, при сравнении экземпляров класса."""
         return self.subscriber_count == other.subscriber_count
-
-    # def __
-    @classmethod
-    def get_service(cls):
-        """Возвращает объект для работы с YouTube API."""
-        return build('youtube', 'v3', developerKey=api_key)
 
     @property
     def channel_id(self):

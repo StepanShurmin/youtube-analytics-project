@@ -1,11 +1,7 @@
-import os
-
-from googleapiclient.discovery import build
-
-api_key: str = os.getenv('YT_API_KEY')
+from src.apimix import ApiMixin
 
 
-class Video:
+class Video(ApiMixin):
     """Родительский класс"""
 
     def __init__(self, video_id: str):
@@ -22,20 +18,12 @@ class Video:
             self.view_count = self.video_response['items'][0]['statistics']['viewCount']
             self.like_count = self.video_response['items'][0]['statistics']['likeCount']
 
-        except:
-            self.title = None
-            self.url = None
-            self.view_count = None
-            self.like_count = None
+        except(IndexError, TypeError):
+            self.title = self.url = self.view_count = self.like_count = None
 
     def __str__(self) -> str:
         """Возвращает строковое представление экземпляра."""
         return self.title
-
-    @classmethod
-    def get_service(cls):
-        """Возвращает объект для работы с YouTube API."""
-        return build('youtube', 'v3', developerKey=api_key)
 
     def verify_video_id(self, video_id):
         """Возвращает количество видео, по идентификатору."""
